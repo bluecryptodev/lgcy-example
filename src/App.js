@@ -136,7 +136,7 @@ function App() {
     console.log(signMessage, tokenIds, ages, sexs, origins, index);
     const trx = await contract
       .adminMint(
-        window.lgcyWeb.defaultAddress.base58,
+        'LLdYXMtMQYHiY36zbMPt59j5db9gpw4MMU',
         tokenIds,
         ages,
         sexs,
