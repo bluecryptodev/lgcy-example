@@ -6,7 +6,6 @@ import Ape3 from './assets/images/ape3.png';
 import Ape4 from './assets/images/ape4.png';
 import Ape5 from './assets/images/ape5.png';
 import axios from 'axios';
-import LgcyWeb from 'wade-lgcyweb';
 // import LgcyWeb from './lgcyweb/src/index';
 // import Weblgcy from 'weblgcy';
 import {
@@ -37,9 +36,6 @@ function App() {
     setTimeout(async () => {
       console.log(window.lgcyWeb);
       if (window.lgcyWeb && !loading) {
-        const webLgcy = new LgcyWeb(window.lgcyWeb);
-        console.log('module=>', webLgcy);
-        setLGCYWeb(webLgcy);
         console.log(window.lgcyWeb.defaultAddress.base58);
         if (window.lgcyWeb.defaultAddress.base58) {
           setWalletAddress(window.lgcyWeb.defaultAddress.base58);
