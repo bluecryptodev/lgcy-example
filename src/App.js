@@ -144,7 +144,7 @@ function App() {
       )
       .send({
         from: window.lgcyWeb.defaultAddress.base58,
-        callValue: 1000000,
+        callValue: 10000000,
       });
 
     console.log(trx);
