@@ -4,8 +4,8 @@ import TestAbi from './test.json';
 import TokenAbi from './token.json';
 import TronTestAbi from './tronTest.json';
 
-const contractAddress = 'LY5T8GuvRFqvapGwXuKGPxtPsKdZbNuyrp';
-const tokenAddress = 'LaUMspqAoxkvKgFeSodcWcGjav7x3aZ6SJ';
+const contractAddress = 'LXtDV7gx9PmqRpwPxAxD9qeEEqSGBNkdf6';
+const tokenAddress = 'LNs3WdXmDDsbKB3dagpdyuG4eMiv4ez3cn';
 const payableAddress = 'LM8nTQ7gsBgTt2SVTmpeaDuiLwNGpd7rXi';
 const testAddress = 'LYCGa7nD1EzWfdCoGexn7cVVHFao7b7jyb';
 const proxyAddress = 'LcCnFSAceFXMgYfTF6CD1GrRUf5KT5DM6U';
