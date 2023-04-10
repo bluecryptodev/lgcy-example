@@ -106,7 +106,7 @@ function App() {
   const mint = async () => {
     const startId = +localStorage.getItem('id') ?? 0;
     const tokenIds = [];
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= 2; i++) {
       tokenIds.push(startId + i);
     }
     setLoading(true);
