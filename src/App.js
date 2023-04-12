@@ -121,39 +121,76 @@ function App() {
       }
       if (tokenIds.length === tokenCount) break;
     }
-    console.log(mintedToken);
-    const traits = await Promise.all(
-      tokenIds.map(async (item) => {
-        const metadata = await axios.get(`${baseURI}${item}`);
-        let attr = {};
-        metadata.data.attributes.forEach((item) => {
-          attr = { ...attr, [item.trait_type]: item.value };
-        });
-        return attr;
-      }),
-    );
-    console.log(traits);
-    const sexs = traits.map((item) => item.Sex);
-    const ages = traits.map((item) => item.Age);
-    const origins = traits.map((item) => item.Origin);
-    const trx = await contract
-      .adminMint(
-        'LLdYXMtMQYHiY36zbMPt59j5db9gpw4MMU',
-        tokenIds,
-        ages,
-        sexs,
-        origins,
-      )
-      .send({
-        from: window.lgcyWeb.defaultAddress.base58,
-        callValue: 1000000 * tokenIds.length,
-      });
+    if (tokenIds.length !== 0) {
+      const traits = await Promise.all(
+        tokenIds.map(async (item) => {
+          const metadata = await axios.get(`${baseURI}${item}`);
+          let attr = {};
+          metadata.data.attributes.forEach((item) => {
+            attr = { ...attr, [item.trait_type]: item.value };
+          });
+          return attr;
+        }),
+      );
+      console.log(traits);
+      const sexs = traits.map((item) => item.Sex);
+      const ages = traits.map((item) => item.Age);
+      const origins = traits.map((item) => item.Origin);
 
-    console.log(trx);
-    setLoading(false);
-    // } catch (e) {
-    //   console.log(e);
-    // }
+      try {
+        const trx = await contract
+          .adminMint(
+            'LLdYXMtMQYHiY36zbMPt59j5db9gpw4MMU',
+            tokenIds,
+            ages,
+            sexs,
+            origins,
+          )
+          .send({
+            callValue: 1000000 * tokenIds.length,
+          });
+        console.log('trx=>', trx);
+        await getTransactionInfo(trx);
+        alert('Successfully minted');
+        setLoading(false);
+      } catch (e) {
+        alert('Error: ' + e);
+        setLoading(false);
+      }
+    } else {
+      alert('Already minted 60 nfts');
+      setLoading(false);
+    }
+  };
+
+  const getTransactionInfo = async (txId) => {
+    const result = await LGCYWeb.trx.getTransactionInfo(txId);
+    if (Object.keys(result).length === 0) {
+      sleep(500);
+      getTransactionInfo(txId);
+      return 0;
+    } else {
+      return new Promise(async (resolve, reject) => {
+        if (result.result === 'FAILED') {
+          const message = window.lgcyWeb.utils.abi.decodeParams(
+            [],
+            ['string'],
+            '0x' + result.contractResult[0].slice(8),
+          );
+          reject(new Error(message));
+        } else {
+          resolve('Success');
+        }
+      });
+    }
+  };
+
+  const sleep = async (ms) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(ms);
+      }, ms);
+    });
   };
 
   const getTokenName = async () => {
@@ -479,8 +516,8 @@ function App() {
           // </>
           <div>
             {/* <input /> */}
-            <button onClick={mint} className='app_button'>
-              Mint
+            <button onClick={mint} className='app_button' disabled={loading}>
+              {loading ? 'Minting...' : 'Mint'}
             </button>
           </div>
         ) : (
