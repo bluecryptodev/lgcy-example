@@ -104,16 +104,24 @@ function App() {
   };
 
   const mint = async () => {
-    const startId = +localStorage.getItem('id') ?? 0;
-    const tokenIds = [];
-    for (let i = 1; i <= 2; i++) {
-      tokenIds.push(startId + i);
-    }
     setLoading(true);
+    const tokenCount = 5;
     const contract = await window.lgcyWeb.contract(
       getAbi(),
       getContractAddress(),
     );
+    let mintedToken = await contract
+      .getMintedTokens('Adult')
+      .call({ from: window.lgcyWeb.defaultAddress.base58 });
+    mintedToken = mintedToken.map((item) => +item.toString());
+    const tokenIds = [];
+    for (let i = 1; i <= 60; i++) {
+      if (!mintedToken.includes(i)) {
+        tokenIds.push(i);
+      }
+      if (tokenIds.length === tokenCount) break;
+    }
+    console.log(mintedToken);
     const traits = await Promise.all(
       tokenIds.map(async (item) => {
         const metadata = await axios.get(`${baseURI}${item}`);
@@ -128,12 +136,6 @@ function App() {
     const sexs = traits.map((item) => item.Sex);
     const ages = traits.map((item) => item.Age);
     const origins = traits.map((item) => item.Origin);
-    const index = 1;
-
-    const signMessage = await window.lgcyWeb.sha3(
-      `Big_foot${tokenIds[index]}${ages[index]}${sexs[index]}`,
-    );
-    console.log(signMessage, tokenIds, ages, sexs, origins, index);
     const trx = await contract
       .adminMint(
         'LLdYXMtMQYHiY36zbMPt59j5db9gpw4MMU',
@@ -148,9 +150,7 @@ function App() {
       });
 
     console.log(trx);
-    setTrxId(trx.txID);
     setLoading(false);
-    localStorage.setItem('id', tokenIds[tokenIds.length - 1]);
     // } catch (e) {
     //   console.log(e);
     // }
