@@ -167,8 +167,7 @@ function App() {
     const result = await LGCYWeb.trx.getTransactionInfo(txId);
     if (Object.keys(result).length === 0) {
       sleep(500);
-      getTransactionInfo(txId);
-      return 0;
+      return getTransactionInfo(txId);
     } else {
       return new Promise(async (resolve, reject) => {
         if (result.result === 'FAILED') {
