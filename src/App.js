@@ -105,7 +105,7 @@ function App() {
 
   const mint = async () => {
     setLoading(true);
-    const tokenCount = 5;
+    const tokenCount = 2;
     const contract = await window.lgcyWeb.contract(
       getAbi(),
       getContractAddress(),
