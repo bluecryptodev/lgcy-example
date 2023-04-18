@@ -6,6 +6,7 @@ import Ape3 from './assets/images/ape3.png';
 import Ape4 from './assets/images/ape4.png';
 import Ape5 from './assets/images/ape5.png';
 import axios from 'axios';
+import LgcyWeb from 'bigfoot-lgcyweb';
 // import LgcyWeb from './lgcyweb/src/index';
 // import Weblgcy from 'weblgcy';
 import {
@@ -34,19 +35,17 @@ function App() {
 
   useEffect(() => {
     setTimeout(async () => {
-      console.log(window.lgcyWeb);
       if (window.lgcyWeb && !loading) {
+        const lgcyWeb = new LgcyWeb(window.lgcyWeb);
+        console.log(lgcyWeb);
         console.log(window.lgcyWeb.defaultAddress.base58);
         if (window.lgcyWeb.defaultAddress.base58) {
           setWalletAddress(window.lgcyWeb.defaultAddress.base58);
+          lgcyWeb.setAddress(window.lgcyWeb.defaultAddress.base58);
         } else {
           setWalletAddress('');
         }
-        const contract = await window.lgcyWeb.contract(
-          getAbi(),
-          getContractAddress(),
-        );
-        console.log(contract);
+        setLGCYWeb(lgcyWeb);
       }
     }, 1000);
   }, [loading]);
